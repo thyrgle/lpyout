@@ -12,6 +12,14 @@ class ScreenSize(Enum):
 
 
 class Screen:
+
+    @property
+    def query(self) -> ScreenSize:
+        """Based on https://tailwindcss.com/docs/responsive-design"""
+        # TODO
+        pass
+
+
     """Mostly for keeping track of the size of the screen."""
     def __init__(self, w=0, h=0):
         self.w = w
@@ -29,6 +37,11 @@ class Anchor(Enum):
     BOTTOM_LEFT = (0, 1)
     BOTTOM_CENTER = (1/2, 1)
     BOTTOM_RIGHT = (1, 1)
+
+
+class QueryGrid:
+    """Grid that adapats to media queries from a screen."""
+    pass
 
 
 class Grid:
@@ -56,6 +69,9 @@ class Grid:
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
+
+    def _propegate_changes(self):
+        pass
 
     @classmethod
     def grid_with_dim(cls, x, y, w, h, row_count, col_count,
@@ -98,37 +114,72 @@ class Grid:
     
     # Padding utilities.
 
-    def p(self, val):
+    @property
+    def p(self):
         """Padding for the grid."""
+        return (self.pl, self.pr, self.pt, self.pb)
+    
+    @p.setter
+    def p(self, val):
         self.pl = val
         self.pr = val
         self.pt = val
         self.pb = val
 
-    def px(self, val):
+    @property
+    def px(self):
         """Padding-left-right for grid."""
+        return (self.pl, self.pr)
+    
+    @px.setter
+    def px(self, val):
         self.pl = val
         self.pr = val
 
+    @property
     def pl(self):
         """Padding-left for the grid."""
+        return self.pl
+
+    @pl.setter
+    def pl(self, val):
         self.pl = val
 
+    @property
     def pr(self):
         """Padding-right for the grid."""
-        self.pr = val
+        return self.pr
 
+    @pr.setter
+    def pr(self, val):
+        self.pr = val
+    
+    @property
     def py(self):
         """Padding-top-bottom for grid."""
+        return (self.pt, self.pb)
+    
+    @py.setter
+    def py(self, val):
         self.pt = val
         self.pb = val
 
+    @property
     def pt(self):
         """Padding-top for the grid."""
+        return self.pt
+    
+    @pt.setter
+    def pt(self, val):
         self.pt = val
-
+    
+    @property
     def pb(self):
         """Padding-bottom for the grid."""
+        return self.pb
+
+    @pb.setter
+    def pb(self, val):
         self.pb = val
 
     # Max and min restrictions.
