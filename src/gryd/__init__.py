@@ -1,11 +1,19 @@
 from enum import Enum
 
 
+class ScreenSize(Enum):
+    """Based on TailwindCSS. See: 
+    https://tailwindcss.com/docs/responsive-design"""
+    SM = 640
+    MD = 768
+    LG = 1024
+    XL = 1280
+    XXL = 1536
+
+
 class Screen:
     """Mostly for keeping track of the size of the screen."""
-    def __init__(self, x=0, y=0, w=0, h=0):
-        self.x = x
-        self.y = y
+    def __init__(self, w=0, h=0):
         self.w = w
         self.h = h
 
@@ -25,23 +33,42 @@ class Anchor(Enum):
 
 class Grid:
     def __init__(self, x, y, w, h, row_count, col_count, 
-                 anchor=Anchor.TOP_LEFT):
+                 anchor=Anchor.TOP_LEFT,
+                 pl=0, pr=0, pt=0, pb=0,
+                 ml=0, mr=0, mt=0, mb=0):
         # TODO: If anchor is not TOP_LEFT need to modify x, y.
+        # Position.
         self.x = x
         self.y = y
+        # Dimensions.
         self.w = w
         self.h = h
+        # Padding.
+        self.pl = pl
+        self.pr = pr
+        self.pt = pt
+        self.pb = pb
+        # Margins.
+        self.ml = ml
+        self.mr = mr
+        self.mt = mt
+        self.mb = mb
+        # Cell info.
         self.row_count = row_count
         self.col_count = col_count
 
     @classmethod
     def grid_with_dim(cls, x, y, w, h, row_count, col_count,
                       anchor=Anchor.TOP_LEFT):
+        """Given location and size, intialize a grid with the specified 
+        number of rows and columns"""
         return cls(x, y, w, h, row_count, col_count)
     
     @classmethod
     def grid_with_cell_dim(cls, x, y, cell_w, cell_h, row_count, col_count,
                            anchor=Anchor.TOP_LEFT):
+        """Given a location and *cell* size, initialize a grid with the
+        specified number of rows and columns."""
         w = cell_w * row_count
         h = cell_h * col_count
         return cls(x, y, w, h, row_count, col_count)
@@ -59,42 +86,50 @@ class Grid:
         subgrid."""
         min_x, max_x = min(at[0], to[0]), max(at[0], to[0])
         min_y, max_y = min(at[1], to[1]), max(at[1], to[1])
-        # TODO Finish
-        pass
+        min_coord = (min_x, min_y)
+        max_coord = (max_x, max_y)
+        # TODO: Continue so it actually initializes.
 
     @classmethod
     def fill_screen(cls, screen, row_count, col_count):
         """Make the grid fill the specified screen."""
-        pass
+        return cls.grid_with_dim(0, 0, screen.w, screen.h, 
+                                 row_count, col_count)
     
     # Padding utilities.
 
-    def p(self):
+    def p(self, val):
         """Padding for the grid."""
-        pass
+        self.pl = val
+        self.pr = val
+        self.pt = val
+        self.pb = val
 
-    def px(self):
+    def px(self, val):
         """Padding-left-right for grid."""
+        self.pl = val
+        self.pr = val
 
     def pl(self):
         """Padding-left for the grid."""
-        pass
+        self.pl = val
 
     def pr(self):
         """Padding-right for the grid."""
-        pass
+        self.pr = val
 
     def py(self):
         """Padding-top-bottom for grid."""
-        pass
+        self.pt = val
+        self.pb = val
 
     def pt(self):
         """Padding-top for the grid."""
-        pass
+        self.pt = val
 
     def pb(self):
         """Padding-bottom for the grid."""
-        pass
+        self.pb = val
 
     # Max and min restrictions.
 
