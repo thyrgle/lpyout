@@ -1,29 +1,38 @@
 from enum import Enum
+from itertools import pairwise
 
 
 class ScreenSize(Enum):
     """Based on TailwindCSS. See: 
     https://tailwindcss.com/docs/responsive-design"""
+    XS = 0
     SM = 640
     MD = 768
     LG = 1024
     XL = 1280
     XXL = 1536
+    XXXL = 1537
 
 
 class Screen:
-
+    """Mostly for keeping track of the size of the screen and making media
+    queries"""
     @property
     def query(self) -> ScreenSize:
         """Based on https://tailwindcss.com/docs/responsive-design"""
-        # TODO
-        pass
+        for q1, q2 in pairwise(ScreenSize):
+            if self.w < q2:
+                return q1
+        return ScreenSize.XXXL
+            
 
-
-    """Mostly for keeping track of the size of the screen."""
-    def __init__(self, w=0, h=0):
+    def __init__(self, w=0, h=0, update_method=lambda w, h: None):
         self.w = w
         self.h = h
+        # If the screen changes size potentially, need to get the values
+        # for the updated screen. Many prebuilts for screens are provided
+        # in optional submodules.
+        self.update = update_method
 
 
 class Anchor(Enum):
@@ -47,6 +56,8 @@ class QueryGrid:
 class Grid:
     def __init__(self, x, y, w, h, row_count, col_count, 
                  anchor=Anchor.TOP_LEFT,
+                 p=0,
+                 px=0, py=0,
                  pl=0, pr=0, pt=0, pb=0,
                  ml=0, mr=0, mt=0, mb=0):
         # TODO: If anchor is not TOP_LEFT need to modify x, y.
@@ -57,6 +68,9 @@ class Grid:
         self.w = w
         self.h = h
         # Padding.
+        self.p = p
+        self.px = px
+        self.py = py
         self.pl = pl
         self.pr = pr
         self.pt = pt
@@ -91,7 +105,8 @@ class Grid:
 
     @classmethod
     def grid_from_cells(cls, x, y, row_count, col_count, width, height,
-                        cells):
+                        cells,
+                        anchor=Anchor.TOP_LEFT):
         """ Given a number of cells (possibly different spans). Organize 
         appropriately."""
         pass
