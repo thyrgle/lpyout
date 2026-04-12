@@ -1,5 +1,6 @@
 from enum import Enum
 from itertools import pairwise
+import types
 
 
 class ScreenSize(Enum):
@@ -32,7 +33,7 @@ class Screen:
         # If the screen changes size potentially, need to get the values
         # for the updated screen. Many prebuilts for screens are provided
         # in optional submodules.
-        self.update = update_method
+        self.update = types.MethodType(update_method, self)
 
 
 class Anchor(Enum):
@@ -136,66 +137,66 @@ class Grid:
     
     @p.setter
     def p(self, val):
-        self.pl = val
-        self.pr = val
-        self.pt = val
-        self.pb = val
+        self._pl = val
+        self._pr = val
+        self._pt = val
+        self._pb = val
 
     @property
     def px(self):
         """Padding-left-right for grid."""
-        return (self.pl, self.pr)
+        return (self._pl, self._pr)
     
     @px.setter
     def px(self, val):
-        self.pl = val
-        self.pr = val
+        self._pl = val
+        self._pr = val
 
     @property
     def pl(self):
         """Padding-left for the grid."""
-        return self.pl
+        return self._pl
 
     @pl.setter
     def pl(self, val):
-        self.pl = val
+        self._pl = val
 
     @property
     def pr(self):
         """Padding-right for the grid."""
-        return self.pr
+        return self._pr
 
     @pr.setter
     def pr(self, val):
-        self.pr = val
+        self._pr = val
     
     @property
     def py(self):
         """Padding-top-bottom for grid."""
-        return (self.pt, self.pb)
+        return (self._pt, self._pb)
     
     @py.setter
     def py(self, val):
-        self.pt = val
-        self.pb = val
+        self._pt = val
+        self._pb = val
 
     @property
     def pt(self):
         """Padding-top for the grid."""
-        return self.pt
+        return self._pt
     
     @pt.setter
     def pt(self, val):
-        self.pt = val
+        self._pt = val
     
     @property
     def pb(self):
         """Padding-bottom for the grid."""
-        return self.pb
+        return self._pb
 
     @pb.setter
     def pb(self, val):
-        self.pb = val
+        self._pb = val
 
     # Max and min restrictions.
 
