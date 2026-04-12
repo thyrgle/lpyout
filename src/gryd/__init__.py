@@ -92,7 +92,8 @@ class Grid:
             self.children.append([])
             for j in range(self.col_count):
                 self.children[i].append(
-                    Cell(j * cell_w, i * cell_h, cell_w, cell_h)
+                    Cell(j * cell_w, i * cell_h, cell_w, cell_h,
+                         parent=self)
                 )
 
     def __getitem__(self, index):
@@ -244,11 +245,12 @@ class Grid:
 
 class Cell(Grid):
     """A 1x1 grid"""
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, parent=None):
         self.x = x
         self.y = y
         self.w = w
         self.h = h
+        self.parent = parent
 
 
 class VBox(Grid):
@@ -256,7 +258,7 @@ class VBox(Grid):
     def __init__(self, x, y, w, h, n):
         super().__init__(x, y, w, h, 1, n)
 
-    def make_with_cell_size(cell_width, cell_height):
+    def make_with_cell_size(cls, cell_width, cell_height):
         pass
 
 
