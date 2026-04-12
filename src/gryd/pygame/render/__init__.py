@@ -4,13 +4,14 @@ from ... import Grid
 
 def fast_render(grid: Grid, surface, color=(255, 255, 255), w=1):
     """Renders with lines instead of squares, ignores style."""
+    # Render rows.
     for i in range(grid.row_count + 1):
         cell_h = grid.h / grid.row_count
         start_pos = (grid.x, i * cell_h)
         end_pos = (grid.x + grid.w, i * cell_h)
         pygame.draw.line(surface, color, start_pos, end_pos, width=w)
-
     
+    # Render cols.
     for i in range(grid.col_count + 1):
         cell_w = grid.w / grid.col_count
         start_pos = (i * cell_w, grid.y)
