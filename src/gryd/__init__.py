@@ -84,6 +84,24 @@ class Grid:
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
+        # Cells
+        cell_w = self.w / self.col_count
+        cell_h = self.h / self.row_count
+        self.children = []
+        for i in range(self.row_count):
+            self.children.append([])
+            for j in range(self.col_count):
+                self.children[i].append(
+                    Cell(j * cell_w, i * cell_h, cell_w, cell_h)
+                )
+
+    def __getitem__(self, index):
+        return self.children[index]
+
+    def __next__(self):
+        for i in range(self.row_count):
+            for j in range(self.col_count):
+                yield self[i][j]
 
     def _propegate_changes(self):
         pass
@@ -227,7 +245,10 @@ class Grid:
 class Cell(Grid):
     """A 1x1 grid"""
     def __init__(self, x, y, w, h):
-        super().__init__(x, y, w, h, 1, 1)
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
 
 
 class VBox(Grid):
