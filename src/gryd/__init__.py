@@ -172,16 +172,6 @@ class Grid:
                                  spacing=spacing)
 
     @classmethod
-    def as_subgrid(cls, grid, at, to):
-        """Make a grid that uses two indices of the parent grid to get a
-        subgrid."""
-        min_x, max_x = min(at[0], to[0]), max(at[0], to[0])
-        min_y, max_y = min(at[1], to[1]), max(at[1], to[1])
-        min_coord = (min_x, min_y)
-        max_coord = (max_x, max_y)
-        # TODO: Continue so it actually initializes.
-
-    @classmethod
     def fill_screen(cls, screen, row_count, col_count,
                     p=None,
                     px=None, py=None,
