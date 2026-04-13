@@ -174,12 +174,26 @@ class Grid:
     
     @classmethod
     def grid_with_cell_dim(cls, x, y, cell_w, cell_h, row_count, col_count,
+                           p=None,
+                           px=None, py=None,
+                           pl=None, pr=None, pt=None, pb=None,
+                           m=None,
+                           mx=None, my=None,
+                           ml=None, mr=None, mt=None, mb=None,
+                           spacing=0,
                            anchor=Anchor.TOP_LEFT):
         """Given a location and *cell* size, initialize a grid with the
         specified number of rows and columns."""
         w = cell_w * row_count
         h = cell_h * col_count
-        return cls.grid_with_dim(x, y, w, h, row_count, col_count)
+        return cls.grid_with_dim(x, y, w, h, row_count, col_count,
+                                 p=p, 
+                                 px=px, py=py,
+                                 pl=pl, pr=pr, pt=pt, pb=pb,
+                                 m=m,
+                                 mx=mx, my=my,
+                                 ml=ml, mr=mr, mt=mt, mb=mb,
+                                 spacing=spacing)
 
     @classmethod
     def as_subgrid(cls, grid, at, to):
@@ -208,6 +222,25 @@ class Grid:
                                  m=m,
                                  mx=mx, my=my,
                                  ml=ml, mr=mr, mt=mt, mb=mb)
+
+
+    @property
+    def x(self):
+        """self.x (but remember it is influenced by margin!)"""
+        return self._x + self.ml
+
+    @x.setter
+    def x(self, val):
+        self._x = val
+
+    @property
+    def y(self):
+        """self.y (but remember it is influenced by margin!)"""
+        return self._y + self.mt
+
+    @y.setter
+    def y(self, val):
+        self._y = val
     
     # Padding utilities.
 
@@ -307,12 +340,64 @@ class Grid:
 
 class Cell(Grid):
     """A 1x1 grid"""
-    def __init__(self, x, y, w, h, parent=None):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y, w, h,
+                 p=None,
+                 px=None, py=None,
+                 pl=None, pr=None, pt=None, pb=None,
+                 m=None,
+                 mx=None, my=None,
+                 ml=None, mr=None, mt=None, mb=None,
+                 spacing=0,
+                 parent=None):
+        self._x = x
+        self._y = y
         self.w = w
         self.h = h
         self.parent = parent
+        # Padding. The assignment is done this way because the "fundamental"
+        # values (pl, pr, pt, pb) should always have a number. So they
+        # *cannot* be None and default to 0. But, is p, px, or py is assigned
+        # and they are not, we want them to default to the p, px, or py
+        # value. Furthermore, if both p, px, or py is assigned and the value
+        # is overriden then we want to use the overriden value.
+        self.pl = p
+        self.pr = p
+        self.pt = p
+        self.pb = p
+        self.pl = px if px is not None else self.pl
+        self.pr = px if px is not None else self.pr
+        self.pt = py if py is not None else self.pt
+        self.pb = py if py is not None else self.pb
+        self.pl = pl if pl is not None else self.pl
+        self.pr = pr if pr is not None else self.pr
+        self.pt = pt if pt is not None else self.pt
+        self.pb = pb if pb is not None else self.pb
+        self.pl = 0 if self.pl is None else self.pl
+        self.pr = 0 if self.pr is None else self.pr
+        self.pt = 0 if self.pt is None else self.pt
+        self.pb = 0 if self.pb is None else self.pb
+        # Margins. The assignment is done this way because the "fundamental"
+        # values (ml, mr, mt, mb) should always have a number. So they
+        # *cannot* be None and default to 0. But, is m, mx, or my is assigned
+        # and they are not, we want them to default to the m, mx, or my
+        # value. Furthermore, if both m, mx, or my is assigned and the value
+        # is overriden then we want to use the overriden value.
+        self.ml = m
+        self.mr = m
+        self.mt = m
+        self.mb = m
+        self.ml = mx if mx is not None else self.ml
+        self.mr = mx if mx is not None else self.mr
+        self.mt = my if my is not None else self.mt
+        self.mb = my if my is not None else self.mb
+        self.ml = ml if ml is not None else self.ml
+        self.mr = mr if mr is not None else self.mr
+        self.mt = mt if mt is not None else self.mt
+        self.mb = mb if mb is not None else self.mb
+        self.ml = 0 if self.ml is None else self.ml
+        self.mr = 0 if self.mr is None else self.mr
+        self.mt = 0 if self.mt is None else self.mt
+        self.mb = 0 if self.mb is None else self.mb
 
 
 class VBox(Grid):
