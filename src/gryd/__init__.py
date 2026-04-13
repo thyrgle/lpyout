@@ -219,70 +219,34 @@ class Grid:
     @property
     def p(self):
         """Padding for the grid."""
-        return (self._pl, self._pr, self._pt, self._pb)
+        return (self.pl, self.pr, self.pt, self.pb)
     
     @p.setter
     def p(self, val):
-        self._pl = val
-        self._pr = val
-        self._pt = val
-        self._pb = val
+        self.pl = val
+        self.pr = val
+        self.pt = val
+        self.pb = val
 
     @property
     def px(self):
         """Padding-left-right for grid."""
-        return (self._pl, self._pr)
+        return (self.pl, self.pr)
     
     @px.setter
     def px(self, val):
-        self._pl = val
-        self._pr = val
+        self.pl = val
+        self.pr = val
 
-    @property
-    def pl(self):
-        """Padding-left for the grid."""
-        return self._pl
-
-    @pl.setter
-    def pl(self, val):
-        self._pl = val
-
-    @property
-    def pr(self):
-        """Padding-right for the grid."""
-        return self._pr
-
-    @pr.setter
-    def pr(self, val):
-        self._pr = val
-    
     @property
     def py(self):
         """Padding-top-bottom for grid."""
-        return (self._pt, self._pb)
+        return (self.pt, self.pb)
     
     @py.setter
     def py(self, val):
-        self._pt = val
-        self._pb = val
-
-    @property
-    def pt(self):
-        """Padding-top for the grid."""
-        return self._pt
-    
-    @pt.setter
-    def pt(self, val):
-        self._pt = val
-    
-    @property
-    def pb(self):
-        """Padding-bottom for the grid."""
-        return self._pb
-
-    @pb.setter
-    def pb(self, val):
-        self._pb = val
+        self.pt = val
+        self.pb = val
 
     def realize(self, anchor=Anchor.CENTER):
         """For a given grid, return the coordinates of that grid. Notice that
