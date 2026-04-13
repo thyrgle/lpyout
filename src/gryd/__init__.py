@@ -55,12 +55,18 @@ class QueryGrid:
 
 
 class Grid:
-    def __init__(self, x, y, w, h, row_count, col_count, 
+    def __init__(self, x, y, w, h, row_count, col_count, parent=None, 
                  anchor=Anchor.TOP_LEFT,
                  p=0,
                  px=0, py=0,
                  pl=0, pr=0, pt=0, pb=0,
-                 ml=0, mr=0, mt=0, mb=0):
+                 m=0,
+                 mx=0, my=0,
+                 ml=0, mr=0, mt=0, mb=0,
+                 spacing=0):
+        """The constructor, should be noted: No children are added here, more
+        than likely, you want to use one of the classmethods to construct a
+        grid."""
         # TODO: If anchor is not TOP_LEFT need to modify x, y.
         # Position.
         self.x = x
@@ -68,19 +74,24 @@ class Grid:
         # Dimensions.
         self.w = w
         self.h = h
+        # The parent grid this belongs to (if applicable, otherwise None).
+        self.parent = parent
         # Padding.
-        self.p = p
-        self.px = px
-        self.py = py
-        self.pl = pl
-        self.pr = pr
-        self.pt = pt
-        self.pb = pb
+        self._p = p
+        self._px = px
+        self._py = py
+        self._pl = pl
+        self._pr = pr
+        self._pt = pt
+        self._pb = pb
         # Margins.
-        self.ml = ml
-        self.mr = mr
-        self.mt = mt
-        self.mb = mb
+        self._m = m
+        self._mx = mx
+        self._my = my
+        self._ml = ml
+        self._mr = mr
+        self._mt = mt
+        self._mb = mb
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
@@ -91,27 +102,38 @@ class Grid:
         return self.children[index]
 
     def __next__(self):
-        for child_row in range(self.children):
-            for child in range(child_row):
+        for row in range(self.children):
+            for child in range(row):
                 yield child
 
     def _propegate_changes(self):
         pass
 
     @classmethod
-    def grid_with_dim(cls, x, y, w, h, row_count, col_count,
+    def grid_with_dim(cls, x, y, w, h,
+                      row_count, col_count,
+                      p=0,
+                      px=0, py=0,
+                      pl=0, pr=0, pt=0, pb=0,
+                      m=0,
+                      mx=0, my=0,
+                      ml=0, mr=0, mt=0, mb=0,
+                      spacing=0,
                       anchor=Anchor.TOP_LEFT):
         """Given location and size, intialize a grid with the specified 
         number of rows and columns"""
         grid = cls(x, y, w, h, row_count, col_count)
-        cell_w = grid.w / grid.col_count
-        cell_h = grid.h / grid.row_count
+        cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count
+        cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count
         # Fill the children with uniform sized cells.
+        x_offset = grid.x + grid.pl
+        y_offset = grid.y + grid.pt
         for i in range(grid.row_count):
             grid.children.append([])
             for j in range(grid.col_count):
                 grid.children[i].append(
-                    Cell(j * cell_w, i * cell_h, cell_w, cell_h,
+                    Cell(x_offset + j * cell_w,
+                         y_offset + i * cell_h, cell_w, cell_h,
                          parent=grid)
                 )
         return grid
@@ -147,7 +169,7 @@ class Grid:
     @property
     def p(self):
         """Padding for the grid."""
-        return (self.pl, self.pr, self.pt, self.pb)
+        return (self._pl, self._pr, self._pt, self._pb)
     
     @p.setter
     def p(self, val):
