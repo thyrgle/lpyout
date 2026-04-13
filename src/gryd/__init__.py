@@ -57,13 +57,13 @@ class QueryGrid:
 class Grid:
     def __init__(self, x, y, w, h, row_count, col_count, parent=None, 
                  anchor=Anchor.TOP_LEFT,
-                 p=0,
-                 px=0, py=0,
-                 pl=0, pr=0, pt=0, pb=0,
-                 m=0,
-                 mx=0, my=0,
-                 ml=0, mr=0, mt=0, mb=0,
-                 spacing=0):
+                 p=None,
+                 px=None, py=None,
+                 pl=None, pr=None, pt=None, pb=None,
+                 m=None,
+                 mx=None, my=None,
+                 ml=None, mr=None, mt=None, mb=None,
+                 spacing=None):
         """The constructor, should be noted: No children are added here, more
         than likely, you want to use one of the classmethods to construct a
         grid."""
@@ -76,22 +76,51 @@ class Grid:
         self.h = h
         # The parent grid this belongs to (if applicable, otherwise None).
         self.parent = parent
-        # Padding.
-        self._p = p
-        self._px = px
-        self._py = py
-        self._pl = pl
-        self._pr = pr
-        self._pt = pt
-        self._pb = pb
-        # Margins.
-        self._m = m
-        self._mx = mx
-        self._my = my
-        self._ml = ml
-        self._mr = mr
-        self._mt = mt
-        self._mb = mb
+        # Padding. The assignment is done this way because the "fundamental"
+        # values (pl, pr, pt, pb) should always have a number. So they
+        # *cannot* be None and default to 0. But, is p, px, or py is assigned
+        # and they are not, we want them to default to the p, px, or py
+        # value. Furthermore, if both p, px, or py is assigned and the value
+        # is overriden then we want to use the overriden value.
+        self.pl = p
+        self.pr = p
+        self.pt = p
+        self.pb = p
+        self.pl = px if px is not None else self.pl
+        self.pr = px if px is not None else self.pr
+        self.pt = py if py is not None else self.pt
+        self.pb = py if py is not None else self.pb
+        self.pl = pl if pl is not None else self.pl
+        self.pr = pr if pr is not None else self.pr
+        self.pt = pt if pt is not None else self.pt
+        self.pb = pb if pb is not None else self.pb
+        self.pl = 0 if self.pl is None else self.pl
+        self.pr = 0 if self.pr is None else self.pr
+        self.pt = 0 if self.pt is None else self.pt
+        self.pb = 0 if self.pb is None else self.pb
+        print(self.pr)
+        # Margins. The assignment is done this way because the "fundamental"
+        # values (ml, mr, mt, mb) should always have a number. So they
+        # *cannot* be None and default to 0. But, is m, mx, or my is assigned
+        # and they are not, we want them to default to the m, mx, or my
+        # value. Furthermore, if both m, mx, or my is assigned and the value
+        # is overriden then we want to use the overriden value.
+        self.ml = m
+        self.mr = m
+        self.mt = m
+        self.mb = m
+        self.ml = mx if mx is not None else self.ml
+        self.mr = mx if mx is not None else self.mr
+        self.mt = my if my is not None else self.mt
+        self.mb = my if my is not None else self.mb
+        self.ml = ml if ml is not None else self.ml
+        self.mr = mr if mr is not None else self.mr
+        self.mt = mt if mt is not None else self.mt
+        self.mb = mb if mb is not None else self.mb
+        self.ml = 0 if self.ml is None else self.ml
+        self.mr = 0 if self.mr is None else self.mr
+        self.mt = 0 if self.mt is None else self.mt
+        self.mb = 0 if self.mb is None else self.mb
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
@@ -112,17 +141,25 @@ class Grid:
     @classmethod
     def grid_with_dim(cls, x, y, w, h,
                       row_count, col_count,
-                      p=0,
-                      px=0, py=0,
-                      pl=0, pr=0, pt=0, pb=0,
-                      m=0,
-                      mx=0, my=0,
-                      ml=0, mr=0, mt=0, mb=0,
+                      p=None,
+                      px=None, py=None,
+                      pl=None, pr=None, pt=None, pb=None,
+                      m=None,
+                      mx=None, my=None,
+                      ml=None, mr=None, mt=None, mb=None,
                       spacing=0,
                       anchor=Anchor.TOP_LEFT):
         """Given location and size, intialize a grid with the specified 
         number of rows and columns"""
-        grid = cls(x, y, w, h, row_count, col_count)
+        grid = cls(x, y, w, h, row_count, col_count,
+                   p=p,
+                   px=px, py=py,
+                   pl=pl, pr=pr, pt=pt, pb=pb,
+                   m=m,
+                   mx=mx, my=my,
+                   ml=ml, mr=mr, mt=mt, mb=mb,
+                   spacing=spacing,
+                   anchor=anchor)
         cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count
         cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count
         # Fill the children with uniform sized cells.
@@ -159,10 +196,22 @@ class Grid:
         # TODO: Continue so it actually initializes.
 
     @classmethod
-    def fill_screen(cls, screen, row_count, col_count):
+    def fill_screen(cls, screen, row_count, col_count,
+                    p=None,
+                    px=None, py=None,
+                    pl=None, pr=None, pt=None, pb=None,
+                    m=None,
+                    mx=None, my=None,
+                    ml=None, mr=None, mt=None, mb=None):
         """Make the grid fill the specified screen."""
         return cls.grid_with_dim(0, 0, screen.w, screen.h, 
-                                 row_count, col_count)
+                                 row_count, col_count,
+                                 p=p,
+                                 px=px, py=py,
+                                 pl=pl, pr=pr, pt=pt, pb=pb,
+                                 m=m,
+                                 mx=mx, my=my,
+                                 ml=ml, mr=mr, mt=mt, mb=mb)
     
     # Padding utilities.
 
