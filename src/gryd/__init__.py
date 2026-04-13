@@ -131,8 +131,7 @@ class Grid:
                          parent=grid)
                 )
         return grid
-
-    
+ 
     @classmethod
     def grid_with_cell_dim(cls, x, y, cell_w, cell_h, row_count, col_count,
                            p=None,
