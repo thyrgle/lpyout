@@ -76,22 +76,12 @@ class Grid:
         self._h = h
         # The parent grid this belongs to (if applicable, otherwise None).
         self.parent = parent
-        # Padding. The assignment is done this way because the "fundamental"
-        # values (pl, pr, pt, pb) should always have a number. So they
-        # *cannot* be None and default to 0. But, is p, px, or py is assigned
-        # and they are not, we want them to default to the p, px, or py
-        # value. Furthermore, if both p, px, or py is assigned and the value
-        # is overriden then we want to use the overriden value.
+        # Padding. Priority is p(l,r,t,b) then p(x,y) then p.
         self.pl = pl or px or p or 0
         self.pr = pr or px or p or 0
         self.pt = pt or py or p or 0
         self.pb = pb or py or p or 0
-        # Margins. The assignment is done this way because the "fundamental"
-        # values (ml, mr, mt, mb) should always have a number. So they
-        # *cannot* be None and default to 0. But, is m, mx, or my is assigned
-        # and they are not, we want them to default to the m, mx, or my
-        # value. Furthermore, if both m, mx, or my is assigned and the value
-        # is overriden then we want to use the overriden value.
+        # Margins. Priority is m(l,r,t,b) then m(x,y) then m.
         self.ml = ml or mx or m or 0
         self.mr = mr or mx or m or 0
         self.mt = mt or my or m or 0
