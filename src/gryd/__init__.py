@@ -49,11 +49,6 @@ class Anchor(Enum):
     BOTTOM_RIGHT = (1, 1)
 
 
-class QueryGrid:
-    """Grid that adapats to media queries from a screen."""
-    pass
-
-
 class Grid:
     def __init__(self, x, y, w, h, row_count, col_count, parent=None, 
                  anchor=Anchor.TOP_LEFT,
@@ -289,7 +284,7 @@ class VBox(Grid):
     def __init__(self, x, y, w, h, n):
         super().__init__(x, y, w, h, 1, n)
 
-    def make_with_cell_size(cls, cell_width, cell_height):
+    def divide_screen(cls, widths=None):
         pass
 
 
@@ -297,3 +292,6 @@ class HBox(Grid):
     """A nx1 grid"""
     def __init__(self, x, y, w, h, n):
         super().__init__(x, y, w, h, n, 1)
+
+    def divide_screen(cls, heights=None):
+        pass
