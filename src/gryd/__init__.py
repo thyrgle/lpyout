@@ -63,7 +63,7 @@ class Grid:
                  m=None,
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
-                 spacing=None):
+                 spacing=0):
         """The constructor, should be noted: No children are added here, more
         than likely, you want to use one of the classmethods to construct a
         grid."""
