@@ -345,7 +345,7 @@ class Cell(Grid):
                  m=None,
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
-                 spacing=0,
+                 rspan=1, cspan=1,
                  parent=None):
         self._x = x
         self._y = y
