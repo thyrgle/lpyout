@@ -69,11 +69,11 @@ class Grid:
         grid."""
         # TODO: If anchor is not TOP_LEFT need to modify x, y.
         # Position.
-        self.x = x
-        self.y = y
+        self._x = x
+        self._y = y
         # Dimensions.
-        self.w = w
-        self.h = h
+        self._w = w
+        self._h = h
         # The parent grid this belongs to (if applicable, otherwise None).
         self.parent = parent
         # Padding. The assignment is done this way because the "fundamental"
@@ -241,6 +241,22 @@ class Grid:
     @y.setter
     def y(self, val):
         self._y = val
+
+    @property
+    def w(self):
+        return self._w - self.mr
+
+    @w.setter
+    def w(self, val):
+        self._w = val
+
+    @property
+    def h(self):
+        return self._h - self.mb
+
+    @h.setter
+    def h(self, val):
+        self._h = val
     
     # Padding utilities.
 
