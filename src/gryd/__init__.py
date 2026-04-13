@@ -134,9 +134,6 @@ class Grid:
             for child in range(row):
                 yield child
 
-    def _propegate_changes(self):
-        pass
-
     @classmethod
     def grid_with_dim(cls, x, y, w, h,
                       row_count, col_count,
