@@ -244,7 +244,7 @@ class Grid:
 
     @property
     def w(self):
-        return self._w - self.mr
+        return self._w - (self.mr + self.ml)
 
     @w.setter
     def w(self, val):
@@ -252,7 +252,7 @@ class Grid:
 
     @property
     def h(self):
-        return self._h - self.mb
+        return self._h - (self.mb + self.mt)
 
     @h.setter
     def h(self, val):
@@ -328,24 +328,6 @@ class Grid:
     def pb(self, val):
         self._pb = val
 
-    # Max and min restrictions.
-
-    def min_w(self):
-        """Minimum-width for the grid."""
-        pass
-
-    def max_w(self):
-        """Maximum-width for the grid."""
-        pass
-
-    def min_h(self):
-        """Minimum-height for the grid."""
-        pass
-
-    def max_h(self):
-        """Maximum-height for the grid."""
-        pass
-
     def realize(self, anchor=Anchor.CENTER):
         """For a given grid, return the coordinates of that grid. Notice that
         this by default returns the center of the grid, but by specifying the
@@ -367,8 +349,8 @@ class Cell(Grid):
                  parent=None):
         self._x = x
         self._y = y
-        self.w = w
-        self.h = h
+        self._w = w
+        self._h = h
         self.parent = parent
         # Padding. The assignment is done this way because the "fundamental"
         # values (pl, pr, pt, pb) should always have a number. So they
