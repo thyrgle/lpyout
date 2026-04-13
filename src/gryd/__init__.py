@@ -98,7 +98,6 @@ class Grid:
         self.pr = 0 if self.pr is None else self.pr
         self.pt = 0 if self.pt is None else self.pt
         self.pb = 0 if self.pb is None else self.pb
-        print(self.pr)
         # Margins. The assignment is done this way because the "fundamental"
         # values (ml, mr, mt, mb) should always have a number. So they
         # *cannot* be None and default to 0. But, is m, mx, or my is assigned
