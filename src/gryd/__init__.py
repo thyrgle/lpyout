@@ -308,50 +308,16 @@ class Cell(Grid):
         self._w = w
         self._h = h
         self.parent = parent
-        # Padding. The assignment is done this way because the "fundamental"
-        # values (pl, pr, pt, pb) should always have a number. So they
-        # *cannot* be None and default to 0. But, is p, px, or py is assigned
-        # and they are not, we want them to default to the p, px, or py
-        # value. Furthermore, if both p, px, or py is assigned and the value
-        # is overriden then we want to use the overriden value.
-        self.pl = p
-        self.pr = p
-        self.pt = p
-        self.pb = p
-        self.pl = px if px is not None else self.pl
-        self.pr = px if px is not None else self.pr
-        self.pt = py if py is not None else self.pt
-        self.pb = py if py is not None else self.pb
-        self.pl = pl if pl is not None else self.pl
-        self.pr = pr if pr is not None else self.pr
-        self.pt = pt if pt is not None else self.pt
-        self.pb = pb if pb is not None else self.pb
-        self.pl = 0 if self.pl is None else self.pl
-        self.pr = 0 if self.pr is None else self.pr
-        self.pt = 0 if self.pt is None else self.pt
-        self.pb = 0 if self.pb is None else self.pb
-        # Margins. The assignment is done this way because the "fundamental"
-        # values (ml, mr, mt, mb) should always have a number. So they
-        # *cannot* be None and default to 0. But, is m, mx, or my is assigned
-        # and they are not, we want them to default to the m, mx, or my
-        # value. Furthermore, if both m, mx, or my is assigned and the value
-        # is overriden then we want to use the overriden value.
-        self.ml = m
-        self.mr = m
-        self.mt = m
-        self.mb = m
-        self.ml = mx if mx is not None else self.ml
-        self.mr = mx if mx is not None else self.mr
-        self.mt = my if my is not None else self.mt
-        self.mb = my if my is not None else self.mb
-        self.ml = ml if ml is not None else self.ml
-        self.mr = mr if mr is not None else self.mr
-        self.mt = mt if mt is not None else self.mt
-        self.mb = mb if mb is not None else self.mb
-        self.ml = 0 if self.ml is None else self.ml
-        self.mr = 0 if self.mr is None else self.mr
-        self.mt = 0 if self.mt is None else self.mt
-        self.mb = 0 if self.mb is None else self.mb
+        # Padding. Priority is p(l,r,t,b) then p(x,y) then p.
+        self.pl = pl or px or p or 0
+        self.pr = pr or px or p or 0
+        self.pt = pt or py or p or 0
+        self.pb = pb or py or p or 0
+        # Margins. Priority is m(l,r,t,b) then m(x,y) then m.
+        self.ml = ml or mx or m or 0
+        self.mr = mr or mx or m or 0
+        self.mt = mt or my or m or 0
+        self.mb = mb or my or m or 0
 
 
 class VBox(Grid):
