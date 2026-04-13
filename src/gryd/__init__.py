@@ -85,24 +85,15 @@ class Grid:
         self.row_count = row_count
         self.col_count = col_count
         # Cells
-        cell_w = self.w / self.col_count
-        cell_h = self.h / self.row_count
         self.children = []
-        for i in range(self.row_count):
-            self.children.append([])
-            for j in range(self.col_count):
-                self.children[i].append(
-                    Cell(j * cell_w, i * cell_h, cell_w, cell_h,
-                         parent=self)
-                )
 
     def __getitem__(self, index):
         return self.children[index]
 
     def __next__(self):
-        for i in range(self.row_count):
-            for j in range(self.col_count):
-                yield self[i][j]
+        for child_row in range(self.children):
+            for child in range(child_row):
+                yield child
 
     def _propegate_changes(self):
         pass
@@ -112,7 +103,19 @@ class Grid:
                       anchor=Anchor.TOP_LEFT):
         """Given location and size, intialize a grid with the specified 
         number of rows and columns"""
-        return cls(x, y, w, h, row_count, col_count)
+        grid = cls(x, y, w, h, row_count, col_count)
+        cell_w = grid.w / grid.col_count
+        cell_h = grid.h / grid.row_count
+        # Fill the children with uniform sized cells.
+        for i in range(grid.row_count):
+            grid.children.append([])
+            for j in range(grid.col_count):
+                grid.children[i].append(
+                    Cell(j * cell_w, i * cell_h, cell_w, cell_h,
+                         parent=grid)
+                )
+        return grid
+
     
     @classmethod
     def grid_with_cell_dim(cls, x, y, cell_w, cell_h, row_count, col_count,
@@ -121,15 +124,7 @@ class Grid:
         specified number of rows and columns."""
         w = cell_w * row_count
         h = cell_h * col_count
-        return cls(x, y, w, h, row_count, col_count)
-
-    @classmethod
-    def grid_from_cells(cls, x, y, row_count, col_count, width, height,
-                        cells,
-                        anchor=Anchor.TOP_LEFT):
-        """ Given a number of cells (possibly different spans). Organize 
-        appropriately."""
-        pass
+        return cls.grid_with_dim(x, y, w, h, row_count, col_count)
 
     @classmethod
     def as_subgrid(cls, grid, at, to):

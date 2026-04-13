@@ -22,11 +22,12 @@ def line_render(grid: Grid, surface):
     """Render with lines and uses applicable styles."""
     pass
 
-def render_recursive(grid: Grid, surface, color=(255,255,255)):
+def render_recursive(grid: Grid, surface,
+                     color=(255,255,255), line_thickness=1):
     """Render with style."""
     if isinstance(grid, Cell):
         rect = pygame.Rect(grid.x, grid.y, grid.w, grid.h)
-        pygame.draw.rect(surface, color, rect)
+        pygame.draw.rect(surface, color, rect, line_thickness)
     else:
         for subgrid in grid:
-            render_recursive(subgrid)
+            render_recursive(subgrid, surface)
