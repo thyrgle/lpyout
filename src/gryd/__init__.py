@@ -120,14 +120,14 @@ class Grid:
         cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count - spacing
         cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count - spacing
         # Fill the children with uniform sized cells.
-        x_offset = grid.x + grid.pl + spacing
-        y_offset = grid.y + grid.pt + spacing
+        x_offset = grid.x + grid.pl + spacing / 2
+        y_offset = grid.y + grid.pt + spacing / 2
         for i in range(grid.row_count):
             grid.children.append([])
             for j in range(grid.col_count):
                 grid.children[i].append(
-                    Cell(x_offset + j * (cell_w + spacing / 2),
-                         y_offset + i * (cell_h + spacing / 2),
+                    Cell(x_offset + j * (cell_w + spacing),
+                         y_offset + i * (cell_h + spacing),
                          cell_w, cell_h,
                          parent=grid)
                 )

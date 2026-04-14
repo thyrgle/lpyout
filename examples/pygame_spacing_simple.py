@@ -12,7 +12,7 @@ running = True
 
 # Initialize grid:
 screen_wrapper.update()
-grid = Grid.fill_screen(screen_wrapper, 5, 5, spacing=10)
+grid = Grid.fill_screen(screen_wrapper, 5, 5, spacing=30)
 
 while running:
     # poll for events
