@@ -117,17 +117,18 @@ class Grid:
                    ml=ml, mr=mr, mt=mt, mb=mb,
                    spacing=spacing,
                    anchor=anchor)
-        cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count
-        cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count
+        cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count - spacing
+        cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count - spacing
         # Fill the children with uniform sized cells.
-        x_offset = grid.x + grid.pl
-        y_offset = grid.y + grid.pt
+        x_offset = grid.x + grid.pl + spacing
+        y_offset = grid.y + grid.pt + spacing
         for i in range(grid.row_count):
             grid.children.append([])
             for j in range(grid.col_count):
                 grid.children[i].append(
-                    Cell(x_offset + j * cell_w,
-                         y_offset + i * cell_h, cell_w, cell_h,
+                    Cell(x_offset + j * (cell_w + spacing / 2),
+                         y_offset + i * (cell_h + spacing / 2),
+                         cell_w, cell_h,
                          parent=grid)
                 )
         return grid
@@ -162,7 +163,8 @@ class Grid:
                     pl=None, pr=None, pt=None, pb=None,
                     m=None,
                     mx=None, my=None,
-                    ml=None, mr=None, mt=None, mb=None):
+                    ml=None, mr=None, mt=None, mb=None,
+                    spacing=0):
         """Make the grid fill the specified screen."""
         return cls.grid_with_dim(0, 0, screen.w, screen.h, 
                                  row_count, col_count,
@@ -171,7 +173,8 @@ class Grid:
                                  pl=pl, pr=pr, pt=pt, pb=pb,
                                  m=m,
                                  mx=mx, my=my,
-                                 ml=ml, mr=mr, mt=mt, mb=mb)
+                                 ml=ml, mr=mr, mt=mt, mb=mb,
+                                 spacing=spacing)
 
 
     @property
