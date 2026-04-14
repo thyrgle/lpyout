@@ -283,17 +283,16 @@ class Cell(Grid):
 
 class VBox(Grid):
     """A 1xn grid"""
-    def __init__(self, x, y, w, h, n):
-        super().__init__(x, y, w, h, 1, n)
-
-    def divide_screen(cls, widths=None):
-        pass
+    @classmethod
+    def divide_screen(cls, screen, n, widths=None):
+        """Divide the screen into n equidistant cells row-wise."""
+        # TODO Allow custom widths.
+        return super(VBox, cls).fill_screen(screen, n, 1)
 
 
 class HBox(Grid):
     """A nx1 grid"""
-    def __init__(self, x, y, w, h, n):
-        super().__init__(x, y, w, h, n, 1)
-
-    def divide_screen(cls, heights=None):
-        pass
+    @classmethod
+    def divide_screen(cls, screen, n, heights=None):
+        """Divide the screen into n equidistant cells column-wise."""
+        return cls.super().fill_screen(screen, 1, n)
