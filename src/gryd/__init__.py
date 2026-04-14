@@ -1,6 +1,20 @@
+from __future__ import annotations
 from enum import Enum
 from itertools import pairwise
 import types
+
+
+def raw_coords(v1: Screen | Grid, v2: Screen | Grid):
+    """Compute the relative coords of one viewport in the other. Raw refers
+    to being raw pixels."""
+    return (v1.x - v2.x, v1.y - v2.y)
+
+def frac_coords(v1: Screen | Grid, v2: Screen | Grid):
+    """Compute the fractional (percentage) coords of one viewport in the other.
+    """
+    raw_x = v1.x - v2.x
+    raw_y = v1.y - v2.y
+    return (raw_x / v2.w, raw_y / v2.h)
 
 
 class ScreenSize(Enum):
