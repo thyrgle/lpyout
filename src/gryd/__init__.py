@@ -297,4 +297,4 @@ class HBox(Grid):
     def divide_screen(cls, screen, n, heights=None):
         """Divide the screen into n equidistant cells column-wise."""
         # TODO: Allow custom widths.
-        return cls.super().fill_screen(screen, 1, n)
+        return super(HBox, cls).fill_screen(screen, 1, n)
