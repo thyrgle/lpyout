@@ -286,7 +286,7 @@ class VBox(Grid):
     @classmethod
     def divide_screen(cls, screen, n, widths=None):
         """Divide the screen into n equidistant cells row-wise."""
-        # TODO Allow custom widths.
+        # TODO Allow custom heights.
         return super(VBox, cls).fill_screen(screen, n, 1)
 
 
@@ -295,4 +295,5 @@ class HBox(Grid):
     @classmethod
     def divide_screen(cls, screen, n, heights=None):
         """Divide the screen into n equidistant cells column-wise."""
+        # TODO: Allow custom widths.
         return cls.super().fill_screen(screen, 1, n)
