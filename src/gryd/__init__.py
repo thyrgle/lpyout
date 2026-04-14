@@ -26,7 +26,9 @@ class Screen:
                 return q1
         return ScreenSize.XXXL
 
-    def __init__(self, w=0, h=0, update_method=lambda w, h: None):
+    def __init__(self, x=0, y=0, w=0, h=0, update_method=lambda w, h: None):
+        self.x = x
+        self.y = y
         self.w = w
         self.h = h
         # If the screen changes size potentially, need to get the values
