@@ -84,7 +84,7 @@ class Grid:
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
-        # Cells
+        # Child Grids (likely cells, but could be another grid.)
         self.children = []
 
     def __getitem__(self, index):
