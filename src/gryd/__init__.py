@@ -73,6 +73,7 @@ class Grid:
                  m=None,
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
+                 value=None,
                  spacing=0):
         """The constructor, should be noted: No children are added here, more
         than likely, you want to use one of the classmethods to construct a
@@ -278,6 +279,7 @@ class Cell(Grid):
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
                  rspan=1, cspan=1,
+                 value=None,
                  parent=None):
         self._x = x
         self._y = y
