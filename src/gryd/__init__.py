@@ -268,6 +268,26 @@ class Grid:
         of the cell."""
         return (self.x + anchor[0] * self.w, self.y + anchor[1] * self.h)
 
+    @property
+    def rpsan(self):
+        return self._rspan
+
+    @rpsan.setter
+    def rspan(self, val):
+        self.w += (val - (self._rspan - 1)) * self.w
+        # TODO: Change parent's children!
+        self._rspan = val
+
+    @property
+    def cspan(self):
+        return self._cspan
+
+    @cspan.setter
+    def cspan(self, val):
+        self.h = (val - (self._cspan - 1)) * self.h
+        # TODO: Change parent's children!
+        self._rspan = val
+
 
 class Cell(Grid):
     """A 1x1 grid"""
