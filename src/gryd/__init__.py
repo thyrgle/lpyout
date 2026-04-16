@@ -74,6 +74,7 @@ class Grid:
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
                  value=None,
+                 rspan=1, cspan=1,
                  spacing=0,
                  index=(0,0)):
         """The constructor, should be noted: No children are added here, more
@@ -99,10 +100,13 @@ class Grid:
         self.mt = mt or my or m or 0
         self.mb = mb or my or m or 0
         # Index (the array location, not real world coords)
-        index = index
+        self.index = index
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
+        # Span in parent grid.
+        self._rspan = rspan
+        self._cspan = cspan
         # Child Grids (likely cells, but could be another grid.)
         self.children = []
 
@@ -306,24 +310,18 @@ class Cell(Grid):
                  value=None,
                  parent=None,
                  index=(0,0)):
-        self._x = x
-        self._y = y
-        self._w = w
-        self._h = h
-        self.parent = parent
-        # Padding. Priority is p(l,r,t,b) then p(x,y) then p.
-        self.pl = pl or px or p or 0
-        self.pr = pr or px or p or 0
-        self.pt = pt or py or p or 0
-        self.pb = pb or py or p or 0
-        # Margins. Priority is m(l,r,t,b) then m(x,y) then m.
-        self.ml = ml or mx or m or 0
-        self.mr = mr or mx or m or 0
-        self.mt = mt or my or m or 0
-        self.mb = mb or my or m or 0
-        # Index (array location instead of real world coord in parent).
-        self.index = index
-
+        super().__init__(x, y, w, h,
+                         p=p,
+                         px=px, py=py,
+                         pl=pl, pr=pr, pt=pt, pb=pb,
+                         m=m,
+                         mx=mx, my=my,
+                         ml=ml, mr=mr, mt=mt, mb=mb,
+                         row_count=1, col_count=1, # Def of a cell.
+                         rspan=rspan, cspan=cspan,
+                         value=value,
+                         parent=parent,
+                         index=index)
 
 class VBox(Grid):
     """A 1xn grid"""
