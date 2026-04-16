@@ -109,9 +109,9 @@ class Grid:
     def __getitem__(self, index):
         return self.children[index]
 
-    def __next__(self):
-        for row in range(self.children):
-            for child in range(row):
+    def __iter__(self):
+        for row in self.children:
+            for child in row:
                 yield child
 
     @classmethod
