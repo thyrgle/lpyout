@@ -74,7 +74,8 @@ class Grid:
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
                  value=None,
-                 spacing=0):
+                 spacing=0,
+                 index=(0,0)):
         """The constructor, should be noted: No children are added here, more
         than likely, you want to use one of the classmethods to construct a
         grid."""
@@ -97,6 +98,8 @@ class Grid:
         self.mr = mr or mx or m or 0
         self.mt = mt or my or m or 0
         self.mb = mb or my or m or 0
+        # Index (the array location, not real world coords)
+        index = index
         # Cell info.
         self.row_count = row_count
         self.col_count = col_count
@@ -145,7 +148,8 @@ class Grid:
                     Cell(x_offset + j * (cell_w + spacing),
                          y_offset + i * (cell_h + spacing),
                          cell_w, cell_h,
-                         parent=grid)
+                         parent=grid,
+                         index=(i, j))
                 )
         return grid
  
@@ -300,7 +304,8 @@ class Cell(Grid):
                  ml=None, mr=None, mt=None, mb=None,
                  rspan=1, cspan=1,
                  value=None,
-                 parent=None):
+                 parent=None,
+                 index=(0,0)):
         self._x = x
         self._y = y
         self._w = w
@@ -316,6 +321,8 @@ class Cell(Grid):
         self.mr = mr or mx or m or 0
         self.mt = mt or my or m or 0
         self.mb = mb or my or m or 0
+        # Index (array location instead of real world coord in parent).
+        self.index = index
 
 
 class VBox(Grid):
