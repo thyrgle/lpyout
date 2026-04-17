@@ -83,8 +83,12 @@ class Grid:
         grid."""
         # TODO: If anchor is not TOP_LEFT need to modify x, y.
         # Position.
-        self._x = x + anchor.value[0] * (parent.w - w)
-        self._y = y + anchor.value[1] * (parent.h - h)
+        if parent is not None:
+            self._x = x + anchor.value[0] * (parent.w - w)
+            self._y = y + anchor.value[1] * (parent.h - h)
+        else: # Only support Anchor.TOP_LEFT if no parent is specified.
+            self._x = x
+            self._y = y
         # Dimensions.
         self._w = w
         self._h = h
@@ -322,7 +326,8 @@ class Grid:
         this by default returns the center of the grid, but by specifying the
         `anchor` you may change this to any percentage for width and height
         of the cell."""
-        return (self.x + anchor[0] * self.w, self.y + anchor[1] * self.h)
+        return (self.x + anchor.value[0] * self.w, 
+                self.y + anchor.value[1] * self.h)
 
     @property
     def rpsan(self):
