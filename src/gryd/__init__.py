@@ -74,6 +74,7 @@ class Grid:
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
                  value=None,
+                 max_w=float('inf'), max_h=float('inf'),
                  rspan=1, cspan=1,
                  spacing=0,
                  index=(0,0)):
@@ -82,8 +83,8 @@ class Grid:
         grid."""
         # TODO: If anchor is not TOP_LEFT need to modify x, y.
         # Position.
-        self._x = x
-        self._y = y
+        self._x = x + anchor.value[0] * (parent.w - w)
+        self._y = y + anchor.value[1] * (parent.h - h)
         # Dimensions.
         self._w = w
         self._h = h
@@ -107,6 +108,10 @@ class Grid:
         # Span in parent grid.
         self._rspan = rspan
         self._cspan = cspan
+        # Max width and max height. (Defaults to float('inf') which is
+        # essential no max width or height.
+        self.max_w = max_w
+        self.max_h = max_h
         # Child Grids (likely cells, but could be another grid.)
         self.children = []
 
@@ -128,6 +133,7 @@ class Grid:
                       mx=None, my=None,
                       ml=None, mr=None, mt=None, mb=None,
                       spacing=0,
+                      parent=None,
                       anchor=Anchor.TOP_LEFT):
         """Given location and size, intialize a grid with the specified 
         number of rows and columns"""
@@ -139,6 +145,7 @@ class Grid:
                    mx=mx, my=my,
                    ml=ml, mr=mr, mt=mt, mb=mb,
                    spacing=spacing,
+                   parent=parent,
                    anchor=anchor)
         cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count - spacing
         cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count - spacing
@@ -200,6 +207,38 @@ class Grid:
                                  ml=ml, mr=mr, mt=mt, mb=mb,
                                  spacing=spacing)
 
+    @classmethod
+    def fill_square(cls, screen, row_count, col_count,
+                    p=None,
+                    px=None, py=None,
+                    pl=None, pr=None, pt=None, pb=None,
+                    m=None,
+                    mx=None, my=None,
+                    ml=None, mr=None, mt=None, mb=None,
+                    spacing=0):
+        """Similar to fillscreen, but it ensures the resulting grid is square
+        by only filling the largest axis."""
+        return cls.grid_with_dim(0, 0,
+                                 min(screen.w, screen.h), # To make square.
+                                 min(screen.w, screen.h),
+                                 row_count, col_count,
+                                 parent=screen,
+                                 p=p,
+                                 px=px, py=py,
+                                 pl=pl, pr=pr, pt=pt, pb=pb,
+                                 m=m,
+                                 mx=mx, my=my,
+                                 ml=ml, mr=mr, mt=mt, mb=mb,
+                                 spacing=spacing,
+                                 anchor=Anchor.CENTER)
+
+    def _update_children(self, dx=0, dy=0):
+        g = self
+        for child in self:
+            child.w = (g.w - (g.pl + g.pr)) / g.col_count - g.spacing
+            child.h = (g.h - (g.pt + g.pb)) / g.row_count - g.spacing
+            child.x += dx
+            child.y += dy
 
     @property
     def x(self):
@@ -209,6 +248,8 @@ class Grid:
     @x.setter
     def x(self, val):
         self._x = val
+        dx = self._x - val
+        self._update_children(dx=dx)
 
     @property
     def y(self):
@@ -218,22 +259,26 @@ class Grid:
     @y.setter
     def y(self, val):
         self._y = val
+        dy = self._y - val
+        self._update_children(dy=dy)
 
     @property
     def w(self):
-        return self._w - (self.mr + self.ml)
+        return min(self.max_w, self._w - (self.mr + self.ml))
 
     @w.setter
     def w(self, val):
         self._w = val
+        self._update_children()
 
     @property
     def h(self):
-        return self._h - (self.mb + self.mt)
+        return min(self.max_h, self._h - (self.mb + self.mt))
 
     @h.setter
     def h(self, val):
         self._h = val
+        self._update_children()
     
     # Padding utilities.
 
@@ -248,6 +293,7 @@ class Grid:
         self.pr = val
         self.pt = val
         self.pb = val
+        self._update_children()
 
     @property
     def px(self):
@@ -258,6 +304,7 @@ class Grid:
     def px(self, val):
         self.pl = val
         self.pr = val
+        self._update_children()
 
     @property
     def py(self):
@@ -268,6 +315,7 @@ class Grid:
     def py(self, val):
         self.pt = val
         self.pb = val
+        self._update_children()
 
     def realize(self, anchor=Anchor.CENTER):
         """For a given grid, return the coordinates of that grid. Notice that
