@@ -5,5 +5,4 @@ API
    :toctree: generated
 
    gryd
-   gryd.pygame
    gryd.pygame.render
