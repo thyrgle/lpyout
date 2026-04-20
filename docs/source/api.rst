@@ -1,7 +1,8 @@
 API
 ===
 
-.. autosummary::
-   :toctree: generated
+.. automodapi:: gryd
+   :no-inheritance-diagram:
 
-   gryd
+.. automodapi:: gryd.pygame
+   :no-inheritance-diagram:
