@@ -11,4 +11,4 @@ Grids play a fundamental role in layout for games and other applications. Consid
 
 # Documentation
 
-An API reference and guides on how to use `lpyout` can be found on [readthedocs.](https://lypout.readthedocs.io/en/latest/)
+An API reference and guides on how to use `lpyout` can be found on [readthedocs.](https://lpyout.readthedocs.io/en/latest/)
