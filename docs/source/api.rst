@@ -1,5 +1,5 @@
 API
 ===
 
-.. automodapi:: gryd
+.. automodapi:: lpyout
    :no-inheritance-diagram:
