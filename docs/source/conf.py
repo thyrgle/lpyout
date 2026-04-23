@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'gryd'
+project = 'lpyout'
 copyright = '2026, Christopher Sumnicht'
 author = 'Christopher Sumnicht'
 release = '0.1.0'
