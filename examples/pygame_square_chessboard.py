@@ -1,7 +1,7 @@
 # Example file showing a basic pygame "game loop"
 import pygame
-from gryd import Grid
-from gryd.pygame import screen_wrapper
+from lpyout import Grid
+from lpyout.pygame import screen_wrapper
 
 # pygame setup
 pygame.init()

@@ -1,8 +1,8 @@
 # Example file showing a basic pygame "game loop"
 import pygame
-from gryd import Grid
-from gryd.pygame import screen_wrapper
-from gryd.pygame.render import render_recursive
+from lpyout import Grid
+from lpyout.pygame import screen_wrapper
+from lpyout.pygame.render import render_recursive
 
 # pygame setup
 pygame.init()
