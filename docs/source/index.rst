@@ -19,4 +19,5 @@ Contents
 
 .. toctree::
 
+   basic
    api
