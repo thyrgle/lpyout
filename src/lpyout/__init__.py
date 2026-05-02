@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from itertools import pairwise
+from itertools import pairwise, accumulate
 import types
 
 
@@ -74,6 +74,7 @@ class Grid:
                  mx=None, my=None,
                  ml=None, mr=None, mt=None, mb=None,
                  value=None,
+                 widths=None, heights=None,
                  max_w=float('inf'), max_h=float('inf'),
                  rspan=1, cspan=1,
                  spacing=0,
@@ -112,6 +113,13 @@ class Grid:
         # Span in parent grid.
         self._rspan = rspan
         self._cspan = cspan
+        # For non-uniform grids. Defaults to None. # Scale
+        self.widths = widths
+        self.heights = heights
+        if widths is not None:
+            self.widths = [self._w * w for w in widths]
+        if heights is not None:
+            self.heights = [self._h * h for h in heights]
         # Max width and max height. (Defaults to float('inf') which is
         # essential no max width or height.
         self.max_w = max_w
@@ -137,6 +145,7 @@ class Grid:
                       mx=None, my=None,
                       ml=None, mr=None, mt=None, mb=None,
                       spacing=0,
+                      widths=None, heights=None,
                       parent=None,
                       anchor=Anchor.TOP_LEFT):
         """Given location and size, intialize a grid with the specified 
@@ -148,20 +157,31 @@ class Grid:
                    m=m,
                    mx=mx, my=my,
                    ml=ml, mr=mr, mt=mt, mb=mb,
+                   widths=widths, heights=heights,
                    spacing=spacing,
                    parent=parent,
                    anchor=anchor)
-        cell_w = (grid.w - (grid.pl + grid.pr)) / grid.col_count - spacing
-        cell_h = (grid.h - (grid.pt + grid.pb)) / grid.row_count - spacing
+        if grid.widths is None:
+            w = (grid.w - grid.pl - grid.pr) / grid.col_count
+            grid.widths = [w for _ in range(grid.col_count)]
+        if grid.heights is None:
+            h = (grid.h - grid.pb - grid.pt) / grid.row_count
+            grid.heights = [h for _ in range(grid.row_count)]
         # Fill the children with uniform sized cells.
-        x_offset = grid.x + grid.pl + spacing / 2
-        y_offset = grid.y + grid.pt + spacing / 2
-        for i in range(grid.row_count):
+        x_offset = grid.x + grid.pl
+        y_offset = grid.y + grid.pt
+        accum_w = list(accumulate(grid.widths, initial=0))
+        accum_h = list(accumulate(grid.heights, initial=0))
+        for i, w in enumerate(grid.widths):
             grid.children.append([])
-            for j in range(grid.col_count):
+            for j, h in enumerate(grid.heights):
+                cell_w = w - (grid.pl + grid.pr) / grid.col_count - spacing
+                cell_h = h - (grid.pt + grid.pb) / grid.row_count - spacing
+                disp_w = accum_w[i]
+                disp_h = accum_h[j]
                 grid.children[i].append(
-                    Cell(x_offset + j * (cell_w + spacing),
-                         y_offset + i * (cell_h + spacing),
+                    Cell(x_offset + disp_w,
+                         y_offset + disp_h,
                          cell_w, cell_h,
                          parent=grid,
                          index=(i, j))
@@ -199,6 +219,7 @@ class Grid:
                     m=None,
                     mx=None, my=None,
                     ml=None, mr=None, mt=None, mb=None,
+                    widths=None, heights=None,
                     spacing=0):
         """Make the grid fill the specified screen."""
         return cls.grid_with_dim(0, 0, screen.w, screen.h, 
@@ -209,6 +230,7 @@ class Grid:
                                  m=m,
                                  mx=mx, my=my,
                                  ml=ml, mr=mr, mt=mt, mb=mb,
+                                 widths=widths, heights=heights,
                                  spacing=spacing)
 
     @classmethod
@@ -382,7 +404,7 @@ class VBox(Grid):
     def divide_screen(cls, screen, n, heights=None):
         """Divide the screen into n equidistant cells row-wise."""
         # TODO Allow custom heights.
-        return super(VBox, cls).fill_screen(screen, n, 1)
+        return super(VBox, cls).fill_screen(screen, n, 1, heights=heights)
 
 
 class HBox(Grid):
